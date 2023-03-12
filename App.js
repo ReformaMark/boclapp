@@ -1,19 +1,16 @@
+import 'react-native-gesture-handler';
 import React from 'react';
 import { StyleSheet} from 'react-native';
 import { ThemeProvider } from 'react-native-elements';
-import { ScrollView } from 'react-native-gesture-handler';
 import './config/firebaseConfig';
 import RootNavigation from './src/navigation';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 export default function App() {
   return (
-    
-    <ThemeProvider>
-
+   
       <RootNavigation />
       
-    </ThemeProvider>
-    
     
   );
 }

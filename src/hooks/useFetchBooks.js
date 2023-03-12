@@ -8,6 +8,8 @@ const useFetchBooks = async (query) => {
 
     return axios.get(`${BASE_URL}?q=${query}&key=${API_KEY}`)
         .then(response => {
+            const req = `${BASE_URL}?q=${query}&key=${API_KEY}`
+            console.log(req)
             console.log(response.data)
             return response.data            
         })

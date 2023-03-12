@@ -1,68 +1,37 @@
 import React,{useState,useEffect} from 'react';
-import { StyleSheet, Text, View } from 'react-native';
-import { useAuthentication } from '../../hooks/useAuthentication';
+import { StyleSheet, Text, View, Image, Dimensions, } from 'react-native';
 import { Button } from 'react-native-elements';
-import { getAuth, signOut } from "firebase/auth";
-import { app } from '../../../config/firebaseConfig'
 import { useForm } from 'react-hook-form'
 import useFetchBooks from '../../hooks/useFetchBooks'
 import CustomInput from '../../components/CustomInput';
+import { useAuthentication } from '../../hooks/useAuthentication';
+import Carousel from '../../components/Carousel/Carousel';
+
 
 export default function HomeScreen({ navigation }) {
   const [books, setBooks ] = useState([]);
-  const {control, handleSubmit, formState: {errors}} = useForm();
-  const { user } = useAuthentication();
-  const auth = getAuth(app);
-
-  const handleSignOut = () => {
-    if (user) {
-      signOut(auth)
-      .then(() => {
-        console.log("Successfully signed out");
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-    }
-  };
+  const [loading, setLoading] = useState(false);
+  const {control, handleSubmit} = useForm();
+  const { user } = useAuthentication()
 
   const handleSearch = (data) => {
-    console.log(data.query)
+    setLoading(true);
     useFetchBooks(data.query)
       .then(response => {
         setBooks(response?.items || []);
-        console.log(response)
+        setLoading(false);
       });
   };
 
-
-
   return (
     <View style={styles.container}>
-      <CustomInput 
-        name="query"     
-        iconName='search'       
-        placeholder="Search Books"
-        control={control}
-        defaulValue=''
-      />
-      <Button 
-        title='Search'
-        onPress={handleSubmit(handleSearch)}
-      />
-      {books.map(book => (
-        <View key={book.id}>
-          <Text>{book.volumeInfo.title}</Text>
-          
-        </View>
-      ))}
       {user ? (
         <View style={styles.userInfo}>
-          <Text>Welcome back, {user.displayName}!</Text>
-            <Button 
-              title="Sign out" 
-              onPress={handleSignOut} 
-            />
+          <Text>Hi, {user.displayName}!</Text>
+          <Image 
+            source={require('../../../assets/Boclapp.png')}
+            style={styles.profile}
+          />
         </View>
       ) : (
         <>
@@ -73,15 +42,29 @@ export default function HomeScreen({ navigation }) {
               buttonStyle={styles.button}
               onPress={() => navigation.navigate('SignIn')}
             />
-            <Button
-              title="Sign Up"
-              type="outline"
-              buttonStyle={styles.button}
-              onPress={() => navigation.navigate('SignUp')}
-            />
           </View>
         </>
       )}
+      <Text > Find your best book</Text>
+      <CustomInput 
+        name="query"     
+        iconName='search'       
+        placeholder="Search Books title, author"
+        control={control}
+        defaulValue=''
+        style={styles.search}
+     
+      />
+      <Button 
+        title='Search'
+        onPress={handleSubmit(handleSearch)}
+      />
+      {loading ? (
+        <Text>Loading...</Text>
+      ) : (
+        books.length > 0 && <Carousel data={books}/>
+      )}
+      
     </View>
   );
 }
@@ -89,8 +72,12 @@ export default function HomeScreen({ navigation }) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
+  },
+  userInfo: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center'
   },
   buttons: {
     marginTop: 20,
@@ -98,4 +85,11 @@ const styles = StyleSheet.create({
   button: {
     marginBottom: 10,
   },
+  profile: {
+    width: 60, 
+    height: 60, 
+    resizeMode: 'contain', 
+    borderColor: 'black',
+  },
+  
 });

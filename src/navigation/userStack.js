@@ -1,52 +1,45 @@
 import React from 'react';
-import { StyleSheet } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import { colors } from '../global/styles';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createDrawerNavigator } from '@react-navigation/drawer';
 import HomeScreen from '../screens/HomeScreen/index'
 import SignInScreen from '../screens/SignInScreen/SignInScreen';
-import { fonts } from '../global/styles';
-import {FontAwesome} from 'react-native-vector-icons';
+import CustomDrawerContent from '../components/CustomDrawerContent';
+import { colors } from '../global/styles';
 
-const Stack = createStackNavigator();
-const Tab = createBottomTabNavigator()
+const Drawer = createDrawerNavigator();
+
 export default function UserStack(){
+
+   
     return (
         <NavigationContainer>
-            <Tab.Navigator >
-                <Tab.Screen 
+            <Drawer.Navigator
+            drawerContentOptions={{
+                activeTintColor: '#e91e63',
+                itemStyle: { marginVertical: 5 },
+            }}
+            drawerContent={(props) => <CustomDrawerContent {...props} />}
+            screenOptions={{
+                headerStyle: {
+                  backgroundColor: colors.mainColor,
+                },
+                headerTintColor: colors.white,
+            }}>
+                <Drawer.Screen 
                 name="Home" 
                 component={HomeScreen} 
                 options={{ 
-                    title: 'Boclapp',
-                    tabBarIcon: ({ color, size }) => (
-                    <FontAwesome name="home" color={color} size={size} />
-                    ),
-                    headerTintColor: colors.charcoal,
-                    headerTitleStyle: {
-                    fontWeight: 'bold',
-                    fontFamily: fonts.poppinsRegular,
-                    },
+                    title: 'Boclapp',                    
                 }} 
                 />
-                <Tab.Screen 
+                <Drawer.Screen 
                 name="SignIn" 
                 component={SignInScreen} 
                 options={{ 
                     title: 'Boclapp',
-                    tabBarIcon: ({ color, size }) => (
-                    <FontAwesome name="home" color={color} size={size} />
-                    ),
-                    headerTintColor: colors.charcoal,
-                    headerTitleStyle: {
-                    fontWeight: 'bold',
-                    fontFamily: fonts.poppinsRegular,
-                    },
-                }} 
-                />
-               
-            </Tab.Navigator>
+                }}/>
+                
+            </Drawer.Navigator>
         </NavigationContainer>
     );
 }

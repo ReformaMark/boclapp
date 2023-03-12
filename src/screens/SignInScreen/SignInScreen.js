@@ -12,20 +12,34 @@ import { app } from '../../../config/firebaseConfig'
 
 const auth = getAuth();
 const SignInScreen = () => {
+ 
   const {height} = useWindowDimensions();
   const navigation = useNavigation();
-  const {control, handleSubmit, formState: {errors}} = useForm();
-  const [error, setError] = useState('');
+  const {control, handleSubmit, setError, clearErrors} = useForm();
+ 
 
   
   const onSigninPressed = async (data) => {
+    console.warn("clicked")
     try {
       
       await signInWithEmailAndPassword( auth ,data.email, data.password)
       
       navigation.navigate('Home');
     } catch (error) {
-      setError(error);
+      if (error.code === 'auth/user-not-found') {
+        setError('email',{
+          type: error.code,
+          message: "User not found"
+        })
+      } else if (error.code === 'auth/wrong-password') {
+        setError('password',{
+          type: error.code,
+          message: "Incorect password"
+        })
+      } else {
+        setError(error.message);
+      }
     }
   };
   const onForgotPasswordPressed =  () =>{
@@ -55,9 +69,9 @@ const SignInScreen = () => {
           placeholder="Email" 
           control={control}
           rules={{required: "Email is required", 
-          pattern:{value:EMAIL_REGEX , message: 'Email is invalid'}
-        
+          pattern:{value:EMAIL_REGEX , message: 'Email is invalid'}        
         }}
+      
         />
         <CustomInput 
           name="password"
@@ -65,9 +79,9 @@ const SignInScreen = () => {
           placeholder="Password"
           control={control}
           rules={{required: "Password is required", minLength: {value: 6, message: "Password should be minimum of 6 characters long."}}}
-          secureTextEntry={true} 
+          secureTextEntry={true}
+        
         />
-        <Text>{error}</Text>
         
         {/*Butons*/}
         <CustomButton 

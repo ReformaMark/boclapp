@@ -24,7 +24,7 @@ export default function AuthStack() {
             headerTintColor: colors.white,
             headerTitleStyle: {
               fontWeight: 'bold',
-              fontFamily: fonts.poppinsRegular,
+            
             },
          }} 
         />
@@ -39,7 +39,6 @@ export default function AuthStack() {
             headerTintColor: colors.white,
             headerTitleStyle: {
               fontWeight: 'bold',
-              fontFamily: fonts.poppinsRegular,
             },
           }} 
         />
@@ -54,7 +53,6 @@ export default function AuthStack() {
           headerTintColor: colors.white,
           headerTitleStyle: {
             fontWeight: 'bold',
-            fontFamily: fonts.poppinsRegular,
           }, 
         }} 
         />
