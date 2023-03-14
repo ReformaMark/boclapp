@@ -8,7 +8,7 @@ import { useNavigation } from '@react-navigation/native'
 import { EMAIL_REGEX } from '../../components/Regex/Regex'
 import { useForm } from 'react-hook-form'
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
-import { app } from '../../../config/firebaseConfig'
+import { app } from '../../data/config/firebaseConfig'
 
 const auth = getAuth();
 const SignInScreen = () => {
@@ -23,8 +23,8 @@ const SignInScreen = () => {
     console.warn("clicked")
     try {
       
-      await signInWithEmailAndPassword( auth ,data.email, data.password)
-      
+      const user = await signInWithEmailAndPassword( auth ,data.email, data.password)
+      console.log(user)
       navigation.navigate('Home');
     } catch (error) {
       if (error.code === 'auth/user-not-found') {

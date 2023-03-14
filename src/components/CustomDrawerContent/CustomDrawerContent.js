@@ -4,7 +4,7 @@ import { Icon } from 'react-native-elements';
 import { DrawerContentScrollView, DrawerItemList, DrawerItem } from '@react-navigation/drawer';
 import { useAuthentication } from '../../hooks/useAuthentication';
 import { getAuth, signOut } from "firebase/auth";
-import { app } from '../../../config/firebaseConfig'
+import { app } from '../../data/config/firebaseConfig'
 
 const CustomDrawerContent = (props) => {
 
