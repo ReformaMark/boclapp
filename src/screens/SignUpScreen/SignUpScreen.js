@@ -6,10 +6,10 @@ import CustomButton from '../../components/CustomButton'
 import SocialSignButtons from '../../components/SocialSignButtons'
 import { EMAIL_REGEX } from '../../components/Regex/Regex'
 import {useForm} from 'react-hook-form'
-import { getAuth, createUserWithEmailAndPassword, sendEmailVerification, updateProfile } from 'firebase/auth';
+import { addUser } from '../../data/services/AuthService';
 
 
-const auth = getAuth();
+
 
 
 const SignUpScreen = () => {
@@ -19,34 +19,20 @@ const SignUpScreen = () => {
   const password = watch('password')
   const {error, setError } = useState('');
 
-  // Firebase Authentication methods
-  const onRegisterPressed = async (data) => {
-    console.log(data);
-    try {
-      const userCredential = await createUserWithEmailAndPassword(auth, data.email, data.password)
-      .then(() => {
-        console.log(userCredential);
-        sendEmailVerification(auth.currentUser);
-        updateProfile(auth.currentUser, {
-          displayName: data.username
-        })
-        console.log("Email verification link has been sent")
-      })
-      .catch(error => {
-        alert(error)
-      }); 
-    
+const onRegisterPressed = async (data) => {
+  console.log(data);
+  try {
+    await addUser(data);
+    console.log('User added successfully');
     navigation.navigate('SignIn');
-
-    } catch (err) {
-      if(err.code === 'auth/email-already-in-use'){
-        console.log('Registration failed: Email already in use')
-      } else{
-        console.log(err.message)
-      }
-        
+  } catch (err) {
+    if(err.code === 'auth/email-already-in-use'){
+      console.log('Registration failed: Email already in use')
+    } else{
+      console.log(err.message)
     }
-  };
+  }
+};
    
   
   const onSignInPressed =  () =>{
@@ -129,7 +115,7 @@ const styles = StyleSheet.create({
     padding: 20,
   },
   title: {
-    fontSize: 24,
+    fontSize: 24, 
     fontWeight: 'bold',
     color: '#051C60',
     marginVertical: '5%',
