@@ -29,7 +29,7 @@ export default function HomeScreen({ navigation }) {
         <View style={styles.userInfo}>
           <Text>Hi, {user.displayName}!</Text>
           <Image 
-            source={require('../../../assets/Boclapp.png')}
+            source={user.photoURL ? { uri: user.photoURL } : require('../../../assets/Boclapp.png')}
             style={styles.profile}
           />
         </View>
@@ -73,6 +73,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     justifyContent: 'flex-start',
+    padding: 10,
   },
   userInfo: {
     flexDirection: 'row',
@@ -89,6 +90,7 @@ const styles = StyleSheet.create({
     width: 60, 
     height: 60, 
     resizeMode: 'contain', 
+    borderRadius: 50,
     borderColor: 'black',
   },
   
